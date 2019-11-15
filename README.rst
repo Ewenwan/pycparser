@@ -2,6 +2,11 @@
 pycparser v2.19
 ===============
 
+Pycparser是C语言的解析器，支持完整的C99标准，用纯Python编写。
+
+非常方便对C语言源码的解析和处理，如生成AST、提取源码中函数调用关系等。
+
+
 :Author: `Eli Bendersky <https://eli.thegreenplace.net/>`_
 
 
