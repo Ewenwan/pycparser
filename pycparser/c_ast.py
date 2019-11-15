@@ -18,6 +18,7 @@
 
 import sys
 
+# 返回类描述
 def _repr(obj):
     """
     Get the representation of an object, with dedicated pprint-like format for lists.
@@ -27,6 +28,7 @@ def _repr(obj):
     else:
         return repr(obj) 
 
+#节点类别  父亲类  抽象语法树节点 基类
 class Node(object):
     __slots__ = ()
     """ Abstract base class for AST nodes.
@@ -105,7 +107,7 @@ class Node(object):
                 showcoord=showcoord,
                 _my_node_name=child_name)
 
-
+# 节点可视化类
 class NodeVisitor(object):
     """ A base NodeVisitor class for visiting c_ast nodes.
         Subclass it and define your own visit_XXX methods, where
@@ -163,20 +165,22 @@ class NodeVisitor(object):
         """
         for c in node:
             self.visit(c)
-
+            
+# 数组定义
 class ArrayDecl(Node):
     __slots__ = ('type', 'dim', 'dim_quals', 'coord', '__weakref__')
     def __init__(self, type, dim, dim_quals, coord=None):
         self.type = type
         self.dim = dim
         self.dim_quals = dim_quals
+        # coord 是标示 节点在源码中的位置信息的(比如代码行号等)
         self.coord = coord
 
     def children(self):
-        nodelist = []
+        nodelist = []  # 节点信息 节点包含的子节点列表
         if self.type is not None: nodelist.append(("type", self.type))
         if self.dim is not None: nodelist.append(("dim", self.dim))
-        return tuple(nodelist)
+        return tuple(nodelist) # 参数 元祖
 
     def __iter__(self):
         if self.type is not None:
@@ -186,6 +190,7 @@ class ArrayDecl(Node):
 
     attr_names = ('dim_quals', )
 
+#数组引用
 class ArrayRef(Node):
     __slots__ = ('name', 'subscript', 'coord', '__weakref__')
     def __init__(self, name, subscript, coord=None):
@@ -207,6 +212,7 @@ class ArrayRef(Node):
 
     attr_names = ()
 
+# 赋值操作
 class Assignment(Node):
     __slots__ = ('op', 'lvalue', 'rvalue', 'coord', '__weakref__')
     def __init__(self, op, lvalue, rvalue, coord=None):
@@ -229,6 +235,7 @@ class Assignment(Node):
 
     attr_names = ('op', )
 
+# 二元操作
 class BinaryOp(Node):
     __slots__ = ('op', 'left', 'right', 'coord', '__weakref__')
     def __init__(self, op, left, right, coord=None):
@@ -251,6 +258,7 @@ class BinaryOp(Node):
 
     attr_names = ('op', )
 
+# break
 class Break(Node):
     __slots__ = ('coord', '__weakref__')
     def __init__(self, coord=None):
@@ -265,6 +273,7 @@ class Break(Node):
 
     attr_names = ()
 
+#case分支
 class Case(Node):
     __slots__ = ('expr', 'stmts', 'coord', '__weakref__')
     def __init__(self, expr, stmts, coord=None):
@@ -287,6 +296,7 @@ class Case(Node):
 
     attr_names = ()
 
+#cast 取数据
 class Cast(Node):
     __slots__ = ('to_type', 'expr', 'coord', '__weakref__')
     def __init__(self, to_type, expr, coord=None):
@@ -347,6 +357,7 @@ class CompoundLiteral(Node):
 
     attr_names = ()
 
+#常量
 class Constant(Node):
     __slots__ = ('type', 'value', 'coord', '__weakref__')
     def __init__(self, type, value, coord=None):
@@ -443,6 +454,7 @@ class Default(Node):
 
     attr_names = ()
 
+# do while语句
 class DoWhile(Node):
     __slots__ = ('cond', 'stmt', 'coord', '__weakref__')
     def __init__(self, cond, stmt, coord=None):
@@ -491,7 +503,9 @@ class EmptyStatement(Node):
         yield
 
     attr_names = ()
-
+    
+    
+# 枚举节点
 class Enum(Node):
     __slots__ = ('name', 'values', 'coord', '__weakref__')
     def __init__(self, name, values, coord=None):
@@ -564,6 +578,7 @@ class ExprList(Node):
 
     attr_names = ()
 
+# 文件抽象节点
 class FileAST(Node):
     __slots__ = ('ext', 'coord', '__weakref__')
     def __init__(self, ext, coord=None):
@@ -582,6 +597,7 @@ class FileAST(Node):
 
     attr_names = ()
 
+# for循环节点
 class For(Node):
     __slots__ = ('init', 'cond', 'next', 'stmt', 'coord', '__weakref__')
     def __init__(self, init, cond, next, stmt, coord=None):
@@ -611,6 +627,7 @@ class For(Node):
 
     attr_names = ()
 
+# 函数调用节点
 class FuncCall(Node):
     __slots__ = ('name', 'args', 'coord', '__weakref__')
     def __init__(self, name, args, coord=None):
@@ -632,6 +649,7 @@ class FuncCall(Node):
 
     attr_names = ()
 
+# 函数声明节点
 class FuncDecl(Node):
     __slots__ = ('args', 'type', 'coord', '__weakref__')
     def __init__(self, args, type, coord=None):
@@ -653,6 +671,7 @@ class FuncDecl(Node):
 
     attr_names = ()
 
+# 函数定义节点
 class FuncDef(Node):
     __slots__ = ('decl', 'param_decls', 'body', 'coord', '__weakref__')
     def __init__(self, decl, param_decls, body, coord=None):
@@ -679,6 +698,7 @@ class FuncDef(Node):
 
     attr_names = ()
 
+# go to 语句
 class Goto(Node):
     __slots__ = ('name', 'coord', '__weakref__')
     def __init__(self, name, coord=None):
@@ -727,6 +747,7 @@ class IdentifierType(Node):
 
     attr_names = ('names', )
 
+# if 语句 节点
 class If(Node):
     __slots__ = ('cond', 'iftrue', 'iffalse', 'coord', '__weakref__')
     def __init__(self, cond, iftrue, iffalse, coord=None):
@@ -810,6 +831,7 @@ class NamedInitializer(Node):
 
     attr_names = ()
 
+# 参数列表
 class ParamList(Node):
     __slots__ = ('params', 'coord', '__weakref__')
     def __init__(self, params, coord=None):
@@ -828,6 +850,7 @@ class ParamList(Node):
 
     attr_names = ()
 
+# 指针声明
 class PtrDecl(Node):
     __slots__ = ('quals', 'type', 'coord', '__weakref__')
     def __init__(self, quals, type, coord=None):
@@ -846,6 +869,7 @@ class PtrDecl(Node):
 
     attr_names = ('quals', )
 
+# 返回节点
 class Return(Node):
     __slots__ = ('expr', 'coord', '__weakref__')
     def __init__(self, expr, coord=None):
@@ -863,6 +887,7 @@ class Return(Node):
 
     attr_names = ()
 
+# 结构体节点 
 class Struct(Node):
     __slots__ = ('name', 'decls', 'coord', '__weakref__')
     def __init__(self, name, decls, coord=None):
@@ -882,6 +907,7 @@ class Struct(Node):
 
     attr_names = ('name', )
 
+# 结构体引用
 class StructRef(Node):
     __slots__ = ('name', 'type', 'field', 'coord', '__weakref__')
     def __init__(self, name, type, field, coord=None):
@@ -904,6 +930,7 @@ class StructRef(Node):
 
     attr_names = ('type', )
 
+#switch 语句
 class Switch(Node):
     __slots__ = ('cond', 'stmt', 'coord', '__weakref__')
     def __init__(self, cond, stmt, coord=None):
@@ -925,6 +952,7 @@ class Switch(Node):
 
     attr_names = ()
 
+# 三元操作符
 class TernaryOp(Node):
     __slots__ = ('cond', 'iftrue', 'iffalse', 'coord', '__weakref__')
     def __init__(self, cond, iftrue, iffalse, coord=None):
@@ -950,6 +978,7 @@ class TernaryOp(Node):
 
     attr_names = ()
 
+#类型声明
 class TypeDecl(Node):
     __slots__ = ('declname', 'quals', 'type', 'coord', '__weakref__')
     def __init__(self, declname, quals, type, coord=None):
@@ -969,6 +998,7 @@ class TypeDecl(Node):
 
     attr_names = ('declname', 'quals', )
 
+#类型定义
 class Typedef(Node):
     __slots__ = ('name', 'quals', 'storage', 'type', 'coord', '__weakref__')
     def __init__(self, name, quals, storage, type, coord=None):
@@ -989,6 +1019,7 @@ class Typedef(Node):
 
     attr_names = ('name', 'quals', 'storage', )
 
+#类型名
 class Typename(Node):
     __slots__ = ('name', 'quals', 'type', 'coord', '__weakref__')
     def __init__(self, name, quals, type, coord=None):
@@ -1026,6 +1057,7 @@ class UnaryOp(Node):
 
     attr_names = ('op', )
 
+# 联合
 class Union(Node):
     __slots__ = ('name', 'decls', 'coord', '__weakref__')
     def __init__(self, name, decls, coord=None):
@@ -1045,6 +1077,7 @@ class Union(Node):
 
     attr_names = ('name', )
 
+# while语句
 class While(Node):
     __slots__ = ('cond', 'stmt', 'coord', '__weakref__')
     def __init__(self, cond, stmt, coord=None):
