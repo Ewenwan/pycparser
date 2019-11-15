@@ -16,21 +16,35 @@ Pycparser是C语言的解析器，支持完整的C99标准，用纯Python编写�
 .. sectnum::
 
 
-Introduction
+简介 Introduction
 ============
 
-What is pycparser?
+什么是 What is pycparser?
 ------------------
 
 **pycparser** is a parser for the C language, written in pure Python. It is a
 module designed to be easily integrated into applications that need to parse
 C source code.
 
-What is it good for?
+pycparser 是用纯 python 编写的C 语言解析器。 它是一个设计成易于集成到需要解析C 源代码的应用程序的MODULE。
+
+What is it good for? 有什么好处？
 --------------------
 
 Anything that needs C code to be parsed. The following are some uses for
 **pycparser**, taken from real user reports:
+
+需要解析C 代码的任何内容。 以下是从实际用户报告中获取的pycparser的一些用法：
+
+C 代码混淆程序
+
+各种专用C 编译器前端
+
+static 代码检查器
+
+自动化单元测试
+
+向C 语言添加专用扩展
 
 * C code obfuscator
 * Front-end for various specialized C compilers
@@ -42,18 +56,28 @@ One of the most popular uses of **pycparser** is in the `cffi
 <https://cffi.readthedocs.io/en/latest/>`_ library, which uses it to parse the
 declarations of C functions and types in order to auto-generate FFIs.
 
+cffi命令行库，它使用它来解析C 函数和类型的声明以便自动生成 FFIs。
+
 **pycparser** is unique in the sense that it's written in pure Python - a very
 high level language that's easy to experiment with and tweak. To people familiar
 with Lex and Yacc, **pycparser**'s code will be simple to understand. It also
 has no external dependencies (except for a Python interpreter), making it very
 simple to install and deploy.
 
-Which version of C does pycparser support?
+这是一种非常高级的语言，可以轻松地进行实验和调整。
+
+它还没有外部依赖项( 除了 python 解释器)，这使得安装和部署它变得非常简单。
+
+Which version of C does pycparser support?  pycparser支持的版本？
 ------------------------------------------
 
 **pycparser** aims to support the full C99 language (according to the standard
 ISO/IEC 9899). Some features from C11 are also supported, and patches to support
 more are welcome.
+
+pycparser 旨在支持完整的c 语言语言( 根据标准 ISO/IEC 9899 )。 C11还支持一些特性，欢迎使用支持更多的补丁。
+尽管花费了很高的代价，但是它可以很容易地把代码解析成许多 GCC-isms。 有关详细信息，
+
 
 **pycparser** supports very few GCC extensions, but it's fairly easy to set
 things up so that it parses code with a lot of GCC-isms successfully. See the
@@ -87,10 +111,14 @@ Prerequisites
 * **pycparser** was tested on Python 2.7, 3.4-3.6, on both Linux and
   Windows. It should work on any later version (in both the 2.x and 3.x lines)
   as well.
+  
+  在Linux和 Windows 上的python 2.7，3.3-3.6进行了测试
 
 * **pycparser** has no external dependencies. The only non-stdlib library it
   uses is PLY, which is bundled in ``pycparser/ply``. The current PLY version is
   3.10, retrieved from `<http://www.dabeaz.com/ply/>`_
+
+pycparser 没有外部依赖项。 它使用的惟一非stdlib库是 PLY，它捆绑在 pycparser/ply 中。
 
 Note that **pycparser** (and PLY) uses docstrings for grammar specifications.
 Python installations that strip docstrings (such as when using the Python
@@ -101,6 +129,8 @@ though.
 
 Installation process
 --------------------
+
+安装 pycparser 非常简单。 下载并解压包之后，你只需执行标准的python setup.py install。 安装脚本将把 pycparser MODULE 放入 python 库安装中的site-packages 中。
 
 Installing **pycparser** is very simple. Once you download and unzip the
 package, you just have to execute the standard ``python setup.py install``. The
@@ -127,7 +157,7 @@ Known problems
 Using
 =====
 
-Interaction with the C preprocessor
+Interaction with the C preprocessor  与C 预处理器的交互 
 -----------------------------------
 
 In order to be compilable, C code must be preprocessed by the C preprocessor -
@@ -146,7 +176,13 @@ the ``using_gcc_E_libc.py`` example for more details. Windows users can download
 and install a binary build of Clang for Windows `from this website
 <http://llvm.org/releases/download.html>`_.
 
-What about the standard C library headers?
+为了编译，C 代码必须由C 预处理器( cpp 预处理器) 预处理。 cpp 处理类似 #include 和 #define的预处理指令，删除注释，并执行它的他编译C 代码的小任务。
+除了最琐碎的C 代码 Fragment ( 比如C 编译器)，就必须接收预处理的C 代码才能正常工作。 在你的路径中输入顶级 parse_file 函数，它将与 cpp 交互，只要它在你的路径中，或者你提供了一条路径到它。
+
+请注意，你可以使用 gcc -E 或者 clang -E 而不是 cpp。 有关更多详细信息，请参见 using_gcc_E_libc.py 示例。 Windows 用户可以下载并安装一个二进制构建的Clang，从这个网站的
+
+
+What about the standard C library headers? 标准的C依赖库 如何？
 ------------------------------------------
 
 C code almost always ``#include``\s various header files from the standard C
@@ -190,7 +226,7 @@ There's also a `FAQ available here <https://github.com/eliben/pycparser/wiki/FAQ
 In any case, you can always drop me an `email <eliben@gmail.com>`_ for help.
 
 
-Modifying
+Modifying   修改需关注 _c_ast.cfg  和 _ast_gen.py
 =========
 
 There are a few points to keep in mind when modifying **pycparser**:
