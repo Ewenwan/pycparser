@@ -1,6 +1,4 @@
-===============
-pycparser v2.19
-===============
+# pycparser v2.19
 
 Pycparser是C语言的解析器，支持完整的C99标准，用纯Python编写。
 
