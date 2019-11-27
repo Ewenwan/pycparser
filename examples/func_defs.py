@@ -1,3 +1,4 @@
+#coding:utf-8
 #-----------------------------------------------------------------
 # pycparser: func_defs.py
 #
@@ -23,9 +24,25 @@ from pycparser import c_parser, c_ast, parse_file
 # A simple visitor for FuncDef nodes that prints the names and
 # locations of function definitions.
 class FuncDefVisitor(c_ast.NodeVisitor):
-    def visit_FuncDef(self, node):
+    # 重写了 访问函数定义节点的函数 
+    def visit_FuncDef(self, node):   # 函数名 visit_FuncDef  指定了 访问 函数定义的节点 
+        print(type(node)             # FuncDef 函数定义 = FuncDecl函数声明 + Compound函数体
+        print(type(node.decl)        # Decl类 父类
+        print(type(node.decl.type))  # FuncDecl函数声明/PtrDecl指针声明/ArrayDecl数组声明/TypeDecl类型声明/
+        if isinstance(node.decl.type,c_ast.FuncDecl):
+            # 是函数定义
+            print(type(node.decl.type.args))        # ParamList  参数列表
+            print(type(node.decl.type.args.params)) # List 列表
+            print(type(node.decl.type.args.params[0])) # Decl 定义
+            print(type(node.decl.type.args.params[0].type)) #  PtrDecl/TypeDecl/ArrayDecl/FuncDecl ...
+            print(type(node.decl.type.args.params[0].type.type)) #  TypeDecl/PtrDecl/ArrayDecl/FuncDecl ...
+            print(type(node.decl.type.args.params[0].type.type.type))  # IdentifierType 标识符 int/float/../结构体
+             
         print('%s at %s' % (node.decl.name, node.decl.coord))
-
+              
+    # 重写了 访问类型定义节点的函数 
+    def visit_TypeDef(self, node): 
+       print(type(node)             # TypeDef类型定义
 
 def show_func_defs(filename):
     # Note that cpp is used. Provide a path to your own cpp or
