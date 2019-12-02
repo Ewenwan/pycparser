@@ -59,6 +59,8 @@ class FuncDefVisitor(c_ast.NodeVisitor):
         #print(node.decl.bitsize)          # 'NoneType'
         
         #print(type(node.decl.type))       # 声明类型 FuncDecl/../  函数声明+函数体 = 函数定义
+        node.decl.type.show()              # 只显示函数声明节点部分
+        node.decl.type.args.show()         # 只显示函数参数节点部分
         #print(isinstance(node.decl.type,c_ast.FuncDecl))  # 判断类型 是函数声明
         #print(type(node.decl.type.args))                  # 函数参数列表 ParamList
         #print(type(node.decl.type.type))                  # 函数返回值 类型定义 TypeDecl
@@ -99,7 +101,10 @@ def show_func_defs(filename):
     # make sure one exists in PATH.
     ast = parse_file(filename, use_cpp=True,
                      cpp_args=r'-Iutils/fake_libc_include')
-
+    
+    ast.show() # 显示整个抽象语法树
+    ast.ext[2].show() # 显示单个节点的 语法树    external  
+             
     v = FuncDefVisitor()
     v.visit(ast)
 
