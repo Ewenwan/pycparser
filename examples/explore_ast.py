@@ -1,6 +1,7 @@
+#coding:utf-8
 #-----------------------------------------------------------------
 # pycparser: explore_ast.py
-#
+# 访问 ast树
 # This example demonstrates how to "explore" the AST created by
 # pycparser to understand its structure. The AST is a n-nary tree
 # of nodes, each node having several children, each with a name.
