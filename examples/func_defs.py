@@ -44,7 +44,45 @@ class FuncDefVisitor(c_ast.NodeVisitor):
             print(type(node.decl.type.args.params[0].type.type)) #  TypeDecl/PtrDecl/ArrayDecl/FuncDecl ...
             print(type(node.decl.type.args.params[0].type.type.type))  # IdentifierType 标识符 int/float/../结构体
              
-        print('%s at %s' % (node.decl.name, node.decl.coord))
+
+        #print(type(node))                 # FuncDef 函数定义  pycparser.c_ast.FuncDef
+        #print(node.param_decls)           # None
+        #print(type(node.decl))            #  Decl  声明  
+        #print(type(node.decl.name))       # 'str'  函数声明 的名字  函数名 
+        
+        # 函数返回值 特殊属性
+        #print(type(node.decl.quals))      # 'list'
+        #print(node.decl.storage[0])       # 'list' 函数返回值存储方式 (static)
+        #print(type(node.decl.funcspec))   # 'list'
+        
+        #print(node.decl.init)             # 'NoneType'  
+        #print(node.decl.bitsize)          # 'NoneType'
+        
+        #print(type(node.decl.type))       # 声明类型 FuncDecl/../  函数声明+函数体 = 函数定义
+        #print(isinstance(node.decl.type,c_ast.FuncDecl))  # 判断类型 是函数声明
+        #print(type(node.decl.type.args))                  # 函数参数列表 ParamList
+        #print(type(node.decl.type.type))                  # 函数返回值 类型定义 TypeDecl
+        
+        # 函数参数 详情
+        print("func: %s , param num: %d" % (node.decl.name, len(node.decl.type.args.params)))
+        #print(type(node.decl.type.args.params))           # List
+        #print(type(node.decl.type.args.params[0]))        # Decl 为定义类
+        #print(type(node.decl.type.args.params[0].type))   # PtrDecl/../
+        #print(type(node.decl.type.args.params[0].type.type)) #TypeDecl/../PtrDecl/..
+        #print(type(node.decl.type.args.params[0].type.type.type)) #IdentifierType 标识符  int/float/char/结构体/联合/枚举 等
+        #print(type(node.decl.type.args.params[0].type.type.type.names)) # 具体类型 标识符名称
+        
+        # 函数返回值详情
+        print(type(node.decl.type.type))                    # 函数返回值 类型定义 TypeDecl
+        print(     node.decl.type.type.declname)            # 函数类型的 名字  函数名
+        print(type(node.decl.type.type.quals))              # 类型定义特殊属性  list
+        print(type(node.decl.type.type.type))               # 标识符 IdentifierType 
+        print(type(node.decl.type.type.type.names))         # 标识符 名字列表
+        print(node.decl.type.type.type.names[0])            # unsigned
+        print(node.decl.type.type.type.names[1])            # int
+        
+        #print(node.decl.type.coord)      # 代码位置
+        print('%s %s at %s ' % (node.decl.name, '', node.decl.coord)) 
         
         # 打印函数内部的 函数调用
         fcv.visit(node)
