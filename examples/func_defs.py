@@ -14,6 +14,8 @@
 from __future__ import print_function
 import sys
 
+import explain_fun_param as efp
+
 # This is not required if you've installed pycparser into
 # your site-packages/ with setup.py
 sys.path.extend(['.', '..'])
@@ -74,6 +76,9 @@ class FuncDefVisitor(c_ast.NodeVisitor):
         #print(type(node.decl.type.args.params[0].type.type.type)) #IdentifierType 标识符  int/float/char/结构体/联合/枚举 等
         #print(type(node.decl.type.args.params[0].type.type.type.names)) # 具体类型 标识符名称
         
+        for i in range(node.decl.type.args.params):
+            print("param %d : %s " % (i+1, efp.explain_c_declaration(node.decl.type.args.params[i],ast)))
+        
         # 函数返回值详情
         print(type(node.decl.type.type))                    # 函数返回值 类型定义 TypeDecl
         print(     node.decl.type.type.declname)            # 函数类型的 名字  函数名
@@ -99,6 +104,7 @@ class FuncDefVisitor(c_ast.NodeVisitor):
 def show_func_defs(filename):
     # Note that cpp is used. Provide a path to your own cpp or
     # make sure one exists in PATH.
+    global ast 
     ast = parse_file(filename, use_cpp=True,
                      cpp_args=r'-Iutils/fake_libc_include')
     
