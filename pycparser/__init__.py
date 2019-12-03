@@ -80,7 +80,7 @@ def parse_file(filename, use_cpp=False, cpp_path='cpp', cpp_args='',
         Errors from cpp will be printed out.
     """
     if use_cpp:
-        text = preprocess_file(filename, cpp_path, cpp_args)
+        text = preprocess_file(filename, cpp_path, cpp_args) #包含预处理
     else:
         with io.open(filename) as f:
             text = f.read()
