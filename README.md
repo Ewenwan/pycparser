@@ -7,6 +7,8 @@ Pycparser是C语言的解析器，支持完整的C99标准，用纯Python编写�
 [扩展版本pycparserext 支持gun扩展 和 opencl ](https://github.com/Ewenwan/pycparserext)
 
 
+[基于pycparser的C代码质量分析 圈复杂度等](https://github.com/Ewenwan/Code-Quality-Analyzer)
+
 :Author: `Eli Bendersky <https://eli.thegreenplace.net/>`_
 
 
